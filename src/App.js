@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react';
 import './App.css';
 
 import ChatListItem from './components/ChatListItem/index';
+import ChatIntro from './components/ChatIntro/index';
 
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -10,12 +11,12 @@ import SearchIcon from '@material-ui/icons/Search';
 
 export default () => {
 
-  const[chatlist, setChatList] = useState([{},{},{},{}]);
+  const[chatlist, setChatList] = useState([{},{},{},{},{},{},{},{},{},{},{},{}]);
 
 
   return (
     <div className="app-window">
-      <div className="sidebar">
+        <div className="sidebar">
           <header>
               <img className="header--avatar" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRRhVBGDTco7wnXZwszhCKkzg4aWapAX6ZvWw&usqp=CAU" alt="" />
               <div className="header--buttons">
@@ -31,24 +32,23 @@ export default () => {
               </div>
           </header>
 
-          <div className="search">
+            <div className="search">
               <div className="search--input">
                 <SearchIcon fontSize="small" style={{color: '#919191'}}/>
                 <input type="search" placeholder="Procurar ou começar uma nova conversa" />
               </div>
-          </div>
-
-          <div className="chatlist">
+            </div>
+            <div className="chatlist">
               {chatlist.map((item, key)=> (
                   <ChatListItem 
-                      key={key}
+                      key={key} 
                   /> 
               ))}
-          </div>
-      </div>
-      <div className="contentarea">
-        ......
-      </div>
+             </div>
+        </div>
+        <div className="contentarea">
+            <ChatIntro />
+        </div>
     </div>
   );
 }
