@@ -3,6 +3,7 @@ import './App.css';
 
 import ChatListItem from './components/ChatListItem/index';
 import ChatIntro from './components/ChatIntro/index';
+import ChatWindow from './components/ChatWindow/index';
 
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -11,7 +12,13 @@ import SearchIcon from '@material-ui/icons/Search';
 
 export default () => {
 
-  const[chatlist, setChatList] = useState([{},{},{},{},{},{},{},{},{},{},{},{}]);
+  const[chatlist, setChatList] = useState([
+    {chatId: 1, title: 'Pedrinho', image:'https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg'},
+    {chatId: 2, title: 'Pedrinho', image:'https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg'},
+    {chatId: 3, title: 'Pedrinho', image:'https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg'},
+    {chatId: 4, title: 'Pedrinho', image:'https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg'},
+  ]); 
+  const [activeChat, setActiveChat] = useState({});
 
 
   return (
@@ -41,13 +48,22 @@ export default () => {
             <div className="chatlist">
               {chatlist.map((item, key)=> (
                   <ChatListItem 
-                      key={key} 
+                      key={key}
+                      data={item}
+                      active={activeChat.chatId === chatlist[key].chatId}
+                      onClick={() => setActiveChat (chatlist[key])}
                   /> 
               ))}
              </div>
         </div>
         <div className="contentarea">
-            <ChatIntro />
+             {activeChat.chatId !== undefined && 
+                <ChatWindow />
+             }
+             {activeChat.chatId === undefined && 
+                <ChatIntro />
+             }      
+            
         </div>
     </div>
   );
