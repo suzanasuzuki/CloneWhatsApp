@@ -19,13 +19,17 @@ export default () => {
     {chatId: 4, title: 'Pedrinho', image:'https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg'},
   ]); 
   const [activeChat, setActiveChat] = useState({});
-
+  const [user, setUser] = useState({
+      id: 1234,
+      avatar:'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRRhVBGDTco7wnXZwszhCKkzg4aWapAX6ZvWw&usqp=CAU',
+      name: 'Suzana Suzuki'
+  });
 
   return (
     <div className="app-window">
         <div className="sidebar">
           <header>
-              <img className="header--avatar" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRRhVBGDTco7wnXZwszhCKkzg4aWapAX6ZvWw&usqp=CAU" alt="" />
+              <img className="header--avatar" src={user.avatar} alt="" />
               <div className="header--buttons">
                   <div className="header--btn">
                       <DonutLargeIcon style={{color: '#919191'}} />
@@ -58,7 +62,9 @@ export default () => {
         </div>
         <div className="contentarea">
              {activeChat.chatId !== undefined && 
-                <ChatWindow />
+                <ChatWindow
+                  user={user}
+                />
              }
              {activeChat.chatId === undefined && 
                 <ChatIntro />
