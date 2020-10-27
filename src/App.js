@@ -1,6 +1,8 @@
   import React, { useState, useEffect} from 'react';
   import './App.css';
 
+  import Api from './Api';
+
   import ChatListItem from './components/ChatListItem/index';
   import ChatIntro from './components/ChatIntro/index';
   import ChatWindow from './components/ChatWindow/index';
@@ -14,14 +16,13 @@
 
   export default () => {
 
-    const[chatlist, setChatList] = useState([
-      {chatId: 1, title: 'Pedrinho', image:'https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg'},
-      {chatId: 2, title: 'Pedrinho', image:'https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg'},
-      {chatId: 3, title: 'Pedrinho', image:'https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg'},
-      {chatId: 4, title: 'Pedrinho', image:'https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg'},
-    ]); 
+    const[chatlist, setChatList] = useState([]); 
     const [activeChat, setActiveChat] = useState({});
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({
+      id: 'vu741YyhAcVNOe4YzGeVYzSigIN2',
+      name: 'Suzana Suzuki',
+      avatar: 'https://graph.facebook.com/3408107292603682/picture'
+    });
 
     const [showNewChat, setShowNewChat] = useState(false);
 
@@ -35,7 +36,7 @@
         name: u.displayName,
         avatar: u.photoURL
       };
-
+      await Api.addUser(newUser);
       setUser(newUser);
 
     }
