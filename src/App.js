@@ -16,7 +16,7 @@
 
   export default () => {
 
-    const[chatlist, setChatList] = useState([]); 
+    const[chatList, setChatList] = useState([]); 
     const [activeChat, setActiveChat] = useState({});
     const [user, setUser] = useState({
       id: 'vu741YyhAcVNOe4YzGeVYzSigIN2',
@@ -29,6 +29,13 @@
     const handleNewChat = () => {
       setShowNewChat(true);
     }
+
+    useEffect(() => {
+        if(user !==null) {
+          let unsub= Api.onChatList(user.id, setChatList);
+          return unsub;
+        }
+    }, [user]);
 
     const handleLoginData = async (u) =>  {
       let newUser = {
@@ -49,7 +56,7 @@
       <div className="app-window">
           <div className="sidebar">
             <NewChat 
-              chatlist={chatlist}
+              chatList={chatList}
               user={user}
               show={showNewChat}
               setShow={setShowNewChat}
@@ -75,13 +82,13 @@
                   <input type="search" placeholder="Procurar ou começar uma nova conversa" />
                 </div>
               </div>
-              <div className="chatlist">
-                {chatlist.map((item, key)=> (
+              <div className="chatList">
+                {chatList.map((item, key)=> (
                     <ChatListItem 
                         key={key}
                         data={item}
-                        active={activeChat.chatId === chatlist[key].chatId}
-                        onClick={() => setActiveChat (chatlist[key])}
+                        active={activeChat.chatId === chatList[key].chatId}
+                        onClick={() => setActiveChat (chatList[key])}
                     /> 
                 ))}
               </div>
@@ -90,6 +97,7 @@
               {activeChat.chatId !== undefined && 
                   <ChatWindow
                     user={user}
+                    data={activeChat}
                   />
               }
               {activeChat.chatId === undefined && 
