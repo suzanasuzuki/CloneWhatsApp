@@ -13,12 +13,14 @@ import CloseIcon from '@material-ui/icons/Close';
 import SendIcon from '@material-ui/icons/Send';
 import MicIcon from '@material-ui/icons/Mic';
 
-export default ({user}) => {
+import Api from '../../Api';
+
+export default ({user, data}) => {
 
     const body = useRef();
 
     let recognition = null;
-    let SpeechRecognition = window. SpeechRecognition || window.webkitSpeechRecognition;
+    let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition !== undefined) {
         recognition = new SpeechRecognition ();
     }
@@ -26,35 +28,15 @@ export default ({user}) => {
     const [emojiOpen, setEmojiOpen] = useState(false);
     const [text, setText] = useState('');
     const [listening, setListening] = useState(false);
-    const [list, setList] = useState([
-        {author:123, body: 'blá,blá,blá'},
-        {author:123, body: 'blá,blá'},
-        {author:1234, body: 'blá,blá,blá,blá'},
-        {author:123, body: 'blá,blá,blá'},
-        {author:123, body: 'blá,blá'},
-        {author:1234, body: 'blá,blá,blá,blá'},
-        {author:123, body: 'blá,blá,blá'},
-        {author:123, body: 'blá,blá'},
-        {author:1234, body: 'blá,blá,blá,blá'},
-        {author:123, body: 'blá,blá,blá'},
-        {author:123, body: 'blá,blá'},
-        {author:1234, body: 'blá,blá,blá,blá'},
-        {author:123, body: 'blá,blá,blá'},
-        {author:123, body: 'blá,blá'},
-        {author:1234, body: 'blá,blá,blá,blá'},
-        {author:123, body: 'blá,blá,blá'},
-        {author:123, body: 'blá,blá'},
-        {author:1234, body: 'blá,blá,blá,blá'},
-        {author:123, body: 'blá,blá,blá'},
-        {author:123, body: 'blá,blá'},
-        {author:1234, body: 'blá,blá,blá,blá'},
-        {author:123, body: 'blá,blá,blá'},
-        {author:123, body: 'blá,blá'},
-        {author:1234, body: 'blá,blá,blá,blá'},
-        {author:123, body: 'blá,blá,blá'},
-        {author:123, body: 'blá,blá'},
-        {author:1234, body: 'blá,blá,blá,blá'},
-    ]);
+    const [list, setList] = useState([]);
+    const [users, setUsers] = useState([]);
+
+    useEffect(()=> {
+        console.log('entered')
+        setList([]);
+        let unsub = Api.onChatContent(data.chatId, setList, setUsers);
+        return unsub;
+    }, [data.chatId]);
 
     useEffect(()=>{
         if(body.current.scrollHeight > body.current.offsetHeight) {
@@ -92,18 +74,28 @@ export default ({user}) => {
 
         }   
     }
-    const handleSendClick = () => {
 
+    const handleInputKeyUp = (e) => {
+        if(e.keyCode === 13) {
+            handleSendClick();
+        }
     }
 
+    const handleSendClick = () => {
+        if(text !=='') {
+            Api.sendMenssage(data, user.id, 'text', text, users);
+            setText('');
+            setEmojiOpen(false);
+        }
+    }
 
     return (
         <div className="chatWindow">
             <div className="chatWindow--header">
                 
                 <div className="chatWindow--headerinfo">
-                    <img className="chatWindow--avatar" src="https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg" alt="" />
-                    <div className="chatWindow--name">Pedrinho</div>
+                    <img className="chatWindow--avatar" src= {data.image} alt="" />
+                    <div className="chatWindow--name">{data.title}  </div>
                 </div>
                 <div className="chatWindow--headerbuttons">
                     <div className="chatWindow--btn">
@@ -143,7 +135,7 @@ export default ({user}) => {
                 <div className="chatWindow--pre">
 
                     <div className="chatWindow--btn" onClick={handleCloseEmoji}
-                        style={{width: emojiOpen?40:0}}
+                        style={{ width: emojiOpen? 40 : 0 }}
                     >
                         <CloseIcon style={{color: '#9919191'}} />
                     </div>
@@ -159,6 +151,7 @@ export default ({user}) => {
                         placeholder="Digite uma mensagem"
                         value={text}
                         onChange={e=>setText(e.target.value)}
+                        onKeyUp={handleInputKeyUp}
                     />
                 </div>
                 <div className="chatWindow--pos">
